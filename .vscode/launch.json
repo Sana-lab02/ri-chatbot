@@ -1,0 +1,14 @@
+{
+    "configurations": [
+
+        {
+            "name": "Run Chatbot (Direct File)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/Richatbot.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true   
+        }
+    ]
+}
