@@ -1,9 +1,26 @@
-from RIbot import RetailBot
+from bot.RIbot import RetailBot
 import pandas as pd
+from flask import Flask, render_template, request, jsonify
+
 
 awaiting_confirmation = None
 
 bot = RetailBot()
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    user_input = request.json["message"]
+    response = bot.process_input(user_input)
+    return jsonify({"reply": response})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80, debug=True)
 
 print("Hi, how may I assist you?")
 

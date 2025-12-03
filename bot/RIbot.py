@@ -95,3 +95,11 @@ class RetailBot:
             return f"Sorry, there was no information entered for '{retailer_name}'."
             
         return f"{real_col} for '{retailer_name}' is: {value}"
+
+    def process_input(self, user_input):
+        """Handles yes/no confirmation in Flask"""
+        if self.awaiting_confirmation:
+            return self.handle_confirmation(user_input)
+        else:
+            self.last_user_input = user_input
+            return self.answer(user_input)
