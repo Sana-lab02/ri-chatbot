@@ -2,8 +2,8 @@ import sqlite3
 import pandas as pd
 
 
-CUSTOMER_EXCEL = '/Users/phood/Documents/Sheet.xlsx'
-TROUBLE_EXCEL = '/Users/phood/Documents/Troubleshootingchat.xlsx'
+CUSTOMER_EXCEL = 'file_path'
+TROUBLE_EXCEL = 'file_path'
 DB_PATH = 'retailers.db'
 
 df = pd.read_excel(CUSTOMER_EXCEL)
