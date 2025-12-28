@@ -1,49 +1,128 @@
 body {
-    background: #111;
-    color: #eee;
-    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    background: #3e3c3c;
+    font-family: "Inter", Arial, sans-serif;
+    color: #fff;
+    flex-direction: column;
+}
+
+.navbar {
+    height: 50px;
+    background: #3e3c3c;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
+    color: #aaa;
 }
 
 .chat-container {
-    width: 460px;
-    margin: 50px;
-    padding: 20px;
-    background: #222;
-    border-radius: 10px;
-    text-align: center;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 #messages {
-    height: 350px;
+    flex: 1;
+    padding: 25px;
     overflow-y: auto;
-    background: #000;
-    padding: 10px;
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.message {
+    max-width: 100%;
+    display: flex;
+    gap: 12px;
+    animation: fadeIn 0.25s ease-in-out;
+    width: 100%;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
     border-radius: 6px;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
 }
 
-.you {
-    color: #4caf50;
-    text-align: left;
-    margin-bottom: 4px;
+.message-text {
+    background: #2b2b2b;
+    padding: 14px 18px;
+    border-radius: 8px;
+    max-width: 600px;
+    line-height: 1.5;
+    word-wrap: break-word;
 }
 
-.bot {
-    color: #00bfff;
-    text-align: left;
-    margin-bottom: 4px;
+.message.you {
+    justify-content: flex-end;
 }
+
+.message.you .avatar {
+    order: 2;
+}
+
+.message.you .message-text {
+    order: 1;             
+}
+
+.message.bot {
+    justify-content: flex-start;
+}
+
+
+.input-container {
+    display: flex;
+    width: 100%;
+    padding: 16px;
+    gap: 10px;
+    background: #3e3c3c;
+    border-top: 1px solid #3d3a3a;
+}
+
 
 input {
-    width: 340px;
-    padding: 10px;
-    border-radius: 5px;
+    flex: 1;
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #2b2b2b;
+    color: #fff;
 }
 
 button {
-    padding: 10px 14px;
-    background: #00bfff;
-    border: none;
-    border-radius: 5px;
+    padding: 16px 40px;
+    border-radius: 10px;
+    border: 1px solid black;
+    background: #3a3c3c;
+    color: #fff;
     cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #444;
+}
+
+.typing {
+    font-style: italic;
+    color: #999;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
 }

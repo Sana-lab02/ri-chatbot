@@ -71,45 +71,45 @@ def find_best_column(user_input, column_aliases, threshold=0.60, ):
     except Exception as e:
         return None
 
-def find_best_row(user_input, df_customer_info, threshold=60):
-    print("USING NEW FIND BEST ROW")
+def find_best_row(user_input, df_customer_info, threshold=0.80, top_n=5):
     # indentify the customer mentioned in user input
     try:
         #clean input and remove white space
-        cleaned_input = user_input.lower().strip()
+        cleaned_input = clean_text(user_input)
         words = cleaned_input.split()
         
         #normailze retailer name
-        retailers = (
-            df_customer_info['retailer']
-            .dropna()
-            .astype(str)
-            .str.strip()
-            .tolist()
-        )
+        retailers = df_customer_info['Retailer'].dropna().astype(str).str.strip()
+        retailers = retailers[retailers.str.lower() != 'retailer']
 
-        best_score = 0
-        best_retailer = None
+        ranked_matches = []
 
-        for retailer in retailers:
-                score = fuzz.partial_ratio(
-                    retailer.lower(),
-                    cleaned_input
+        for size in range(1, len(words)+ 1):
+            for i in range(len(words) - size + 1):
+                ngram = " ".join(words[i:i+size])
+
+                match = process.extractOne(
+                    ngram,
+                    retailers,
+                    scorer=fuzz.token_sort_ratio
                 )
-                print(f"Debug... retailer '{retailer}' score: {score}")
-                if score > best_score:
-                    best_score = score
-                    best_retailer = retailer
+                if match:
+                    retailer_candidate, score = match
+                    if score >= threshold:
+                        row_index = df_customer_info.index[df_customer_info["Retailer"].str.strip() == retailer_candidate][0]
+                        ranked_matches.append((row_index, retailer_candidate, score))
 
-        if best_score < threshold:
-            return None, None, best_score
+        seen = {}
+        for r in ranked_matches:
+            if r[1] not in seen or r[2] > seen[r[1]][2]:
+                seen[r[1]] = r
+        ranked_matches = list(seen.values())
 
-        row_index = df_customer_info.index[df_customer_info["retailer"].str.strip() == best_retailer][0]
-        print("Debug.. ", best_retailer, best_score)
-        return row_index, best_retailer, best_score
+        ranked_matches.sort(key=lambda x: x[2], reverse=True)
 
+        return ranked_matches[:top_n]
     except Exception as e:
-        return None, None, 0
+        return []
 
 
 

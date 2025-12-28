@@ -195,3 +195,24 @@ def chat_bot_loop():
 
 if __name__ == "__main__":
     chat_bot_loop()
+
+
+
+def lookup_retailer_info(self, row_index, retailer_name):
+        col_name, col_score = find_best_column(self.last_user_input, column_aliases)
+        
+        if not col_name or col_score < COLUMN_MEDIUM:
+            return f"I found '{retailer_name}', but what info do you need?"
+        
+        actual_cols = {c.lower().strip(): c for c in self.df_customer_info.columns}
+        real_col = actual_cols.get(col_name.lower().strip(), col_name)
+
+        if real_col not in self.df_customer_info.columns:
+            return f"Sorry, I couldn't find that information for '{retailer_name}'."
+
+        value = self.df_customer_info.at[row_index, real_col]
+           
+        if pd.isna(value) or str(value).strip() == "":
+            return f"Sorry, there was no information entered for '{retailer_name}'."
+            
+        return f"{real_col} for '{retailer_name}' is: {value}"

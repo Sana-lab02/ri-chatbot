@@ -1,9 +1,11 @@
 import re
+from rapidfuzz import fuzz
 import nltk
 import numpy as np
 import pandas as pd
 from nltk.stem import WordNetLemmatizer
 import sys
+from bot.Keywords import credential_terms
 
 nltk.download('wordnet', quiet=True)
 nltk.download('omw-1.4', quiet=True)
@@ -13,22 +15,25 @@ lemmatizer = WordNetLemmatizer()
 
 
 
-def clean_text(text, lemmatize=True):
+def clean_text(text):
     if not isinstance(text, str):
         return ""
-    text = text.lower()
-    text = re.sub(r'[^a-z0-9\s\.]', "", text)
-    text = re.sub(r'\s+', " ", text).strip()
-    if lemmatize:
-        tokens = [lemmatizer.lemmatize(t) for t in text.split()]
-        return " ".join(tokens)
+    text = text.lower().strip()
+    text = re.sub(r"\s+", " ", text)
+    
+    text = re.sub(r"[^\w\s'&\-\.]", "", text)
+
     return text
 
-def mask_value_for_debug(user_input):
-    s = st(value)
-    if len(s) <= 4:
-        return "*" * len(s)
-    return s[:2] + "*" (len(s) - 4) + s[-2:]
+def clean_text_tfidf(text):
+    if not isinstance(text, str):
+        return ""
+    text = text.lower().strip()
+    text = re.sub(r"\s+", " ", text)
+    
+    text = re.sub(r"[^\w\s'&\-\.]", "", text)
+    
+    return text
 
 # Helper for safe prints
 def safe_print(*args, **kwargs):
@@ -47,3 +52,10 @@ def load_excel_files(trouble_path, customer_path):
         safe_print("Error: One or more Excel files could not be found.")
         safe_print(e)
         sys.exit(1)
+
+def is_credential_question(user_input):
+    text = user_input.lower()
+    for term in credential_terms:
+        if fuzz.partial_ratio(term, text) > 80:
+            return True
+    return False

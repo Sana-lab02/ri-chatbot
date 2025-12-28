@@ -1,41 +1,82 @@
 <!DOCTYPE html>
 <head>
-    <title>RI Chatbot</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>RI Helper</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="navbar">RI Helper</div>
+
     <div class ="chat-container">
-        <h2>RI Chatbot</h2>
         <div id="messages"></div>
 
-        <input id="user-input" type="text" placeholder="Ask a question..." autofocus>
-        <button onclick="sendMessage()">Send</button>
+        <div class="input-container">
+            <input id="user-input" type="text" placeholder="Ask a question..." autofocus>
+            <button onclick="sendMessage()">Send</button>
     </div>
 
     <script>
+        document.getElementById("user-input").addEventListener("keydown", function(e){
+            if (e.key === "Enter") {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        let typingElem = null
         async function sendMessage() {
-            const input = document.getElementById("user_input");
-            const msg = input.value;
+            const input = document.getElementById("user-input");
+            const msg = input.value.trim();
+            if (!msg) return;
             
-            appendMessage("You", msg);
+            appendMessage("you", msg);
             input.value = "";
 
+            showTyping();
+
             const response = await fetch("/chat", {
-                method: "POST"
-                headers: {"Content-Type": "application/jsonn"}
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({message: msg})
             });
 
+            hideTyping();
+
             const data = await response.json();
-            appendMessage("Bot", data.reply);
+            appendMessage("bot", data.reply);
         }
 
         function appendMessage(sender, message) {
-            const chat = documen.getElementById("messages");
-            const div = document.createElement("div");
-            div.className = sender.toLowerCase();
-            div.innerText = '${sender}: ${message}';
-            chat.appendChild(div);
+            const chat = document.getElementById("messages");
+
+            const wrapper = document.createElement("div")
+            wrapper.className = `message ${sender}`;
+
+
+            const text = document.createElement("div");
+            text.className = "message-text";
+            text.innerText = message;
+
+            wrapper.appendChild(text);
+            chat.appendChild(wrapper)
+
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function showTyping() {
+            const chat = document.getElementById("messages");
+
+            typingElem = document.createElement("div");
+            typingElem.className = "typing";
+            typingElem.innerText = "Bot is typing... ";
+
+            chat.appendChild(typingElem);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function hideTyping(){
+            if (typingElem) {
+                typingElem.remove();
+                typingElem = null;
+            }
         }
     </script>
 </body>
