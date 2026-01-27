@@ -1,8 +1,8 @@
 exit_commands = 'quit', 'exit', 'stop', 'no that is it', 'pause'
 
 column_aliases = {
-    "ri_app_password": ["password", "ri password", "app password", "ri app pass", "riapp password", "riapp pass"],
-    "ri_app_username": ["riappusername", "ri app user", "ri application username"],
+    "password": ["password", "ri password", "app password", "ri app pass", "riapp password", "riapp pass"],
+    "username": ["riappusername", "ri app user", "ri application username"],
     "ipad_number": ["Trupad number", "trupad number", "ipad"],
     "system_model": ["ipad system model", "ipad model", "ipad generation", "generation", "ipad sys number"],
     "account_number": ["account number", "account num", "acc number", "acc num", "ac number", "ac num"],
@@ -20,8 +20,8 @@ credential_terms = [
 ]
 
 column_to_names = {
-    "ri_app_password": "app password",
-    "ri_app_username": "app username",
+    "password": "app password",
+    "username": "app username",
     "account_number": "account number",
     "email": "email address",
     "serial_number": "ipad serial number",
