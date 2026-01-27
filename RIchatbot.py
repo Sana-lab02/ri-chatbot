@@ -21,8 +21,8 @@ TROUBLE_THRESHOLD = 0.10  #cosine similarity threshold for troubleshoting anwers
 
 # ======Load Excel Sheets==========#
 df_trouble, df_customer_info = load_excel_files(
-    '/Users/phood/Documents/Troubleshootingchat.xlsx', 
-    '/Users/phood/Documents/Sheet.xlsx'
+    'File', 
+    'file'
 )
 
 
